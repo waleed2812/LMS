@@ -1,6 +1,6 @@
 import { NgForm } from '@angular/forms';
 
-const baseUrl = 'http://localhost:3100';
+const baseUrl = 'http://localhost:6968';
 export const Globals = {
   deviceType: 'web',
   appName: 'Test App',

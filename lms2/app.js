@@ -36,6 +36,7 @@ let corsOptionsDelegate = (req, callback) => {
         'http://localhost:' + (process.env.FE_PORT || 6969),
         'http://192.168.1.73:' + (process.env.PORT || 6968),
         'http://192.168.1.73:' + (process.env.FE_PORT || 6969),
+        'http://192.168.1.73:' + (4200),
     ];
     if (allowedOrigins.indexOf(req.header('Origin')) !== -1) {
         corsOptions = {
