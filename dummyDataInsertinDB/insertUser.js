@@ -47,7 +47,7 @@ userAccount.pre('save', async function(next) {
 
 const userAccountModel = mongoose.model('userAccounts', userAccount);
 
-mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/SCM?retryWrites=true&w=majority`, function(err, db){
+mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`, function(err, db){
 
     if(err) {
         console.error("Failed to Connect Mongoose");

@@ -1,82 +1,64 @@
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongoose = require('mongoose'),
-    JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt,
-    // path = require('path'),
     userAccounts = mongoose.model('userAccounts');
 
 // Local Login Strategy
 passport.use(new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password',
-}, function(email, password, done) {
-    userAccounts.findOne({ email: email }, {
-        updatedAt: 0,
-        createdAt: 0,
-        __v: 0,
-        // password: 0,
-    }, (err, user) => {
+    passReqToCallback: true,
+}, function(req, username, password, done) {
+    
+    const filter = {$or:[{email: username}, {phone: username}, {username: username}]}
+    
+    userAccounts.findOne(filter, function(err, user) {
         if (err) {
             return done(err);
         }
         if (!user) {
-            return done(null, false, { message: 'Invalid UserName provided' });
+            return done(null, false, { message: "User Not Found" });
         }
-        user.comparePassword(password, (err, isMatch) => {
+        user.comparePassword(password, function(err, isMatch) {
             if (err) {
                 return done(err);
             }
             if (!isMatch) {
-                return done(null, false, { message: 'Invalid Password Provided' });
+                return done(null, false, { message: "Invalid Password" });
             }
-
             return done(null, user);
         });
     });
 }));
 
-passport.use(new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.session.secret,
-    passReqToCallback: true,
-}, async (req, user, done) => {
-    let accountFound = await userAccounts.findById(user._id);
-
-    if (!accountFound) {
-        return done({ message: 'Unable to find user.' });
-    }
-    return done(null, accountFound);
-}));
-
-passport.serializeUser((user, done) => {
+passport.serializeUser(function(user, done) {
     done(null, { _id: user._id, userType: user.userType });
 });
 
-passport.deserializeUser((user, done) => {
-    userAccounts.findById(user._id, function(err, user) {
+passport.deserializeUser(function(user, done) {
+   userAccounts.findById(user._id, function(err, user) {
         if (user) {
             done(err, user);
         } else {
-            return done({ message: 'Unable to find user.' });
+            return done({ msgCode: 11 });
         }
     });
 });
 
 // passport middlewares
-passport.isAuthenticated = (req, res, next) => {
+passport.isAuthenticated = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    return next({ message: 'User is not authenticated' });
+    return next({ msgCode: 3 });
 };
 
-passport.isAuthorized = (userType) => {
-    return (req, res, next) => {
+passport.isAuthorized = function(userType) {
+    return function(req, res, next) {
         if (req.user.userType == userType) {
             return next();
         }
-        return next({ message: 'User is not authorized to access this api.' });
+        return next({ message: 'User is Not authorized to access this api.' });
     };
 };
 

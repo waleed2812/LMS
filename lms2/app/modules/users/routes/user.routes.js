@@ -8,25 +8,29 @@ module.exports = (app, version) => {
 
     app.post(
         version + '/user/login',
-        userValidations.validateUserSignIn,
         userController.logInUser,
         userController.sendSingInSuccess,
     );
 
     app.get(
         version + '/user/current',
-        passport.authenticate('jwt', { session: false }),
+        passport.isAuthenticated,
         userController.sendCurrentUser,
     );
 
     app.post(version + '/users/:userId',
-        passport.authenticate('jwt', { session: false }),
+        passport.isAuthenticated,
         userController.updateUserInfo
     );
 
     app.post(version + '/user/profileImage',
-        passport.authenticate('jwt', { session: false }),
+        passport.isAuthenticated,
         multer.single('image'),
         userController.userProfileImage,
+    );
+
+    app.delete(version + '/logout',
+        passport.isAuthenticated,
+        userController.logout
     );
 };
