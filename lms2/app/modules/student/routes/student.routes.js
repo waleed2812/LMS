@@ -2,17 +2,16 @@ const studentController = require('../controllers/student.controller'),
     passport = require('../../../../config/passport');
 
 module.exports = (app, version) => {
-    // Assignment 3
     app.get(version + '/student',
         passport.isAuthenticated,
         passport.isAuthorized('student'),
         studentController.getstudentDashboard
     );
 
-    app.get(version + '/student/attemptquiz',
+    app.get(version + '/student/viewquiz',
         passport.isAuthenticated,
         passport.isAuthorized('student'),
-        studentController.attemptQuiz
+        studentController.viewQuiz
     );
 
     app.get(version + '/student/viewassignment',
@@ -45,10 +44,10 @@ module.exports = (app, version) => {
         studentController.getResult
     );
 
-    app.post(version + '/student/viewquiz',
+    app.post(version + '/student/attemptQuiz',
         passport.isAuthenticated,
         passport.isAuthorized('student'),
-        studentController.viewQuiz
+        studentController.attemptQuiz
     );
 
     app.post(version + '/student/submitassignment',
