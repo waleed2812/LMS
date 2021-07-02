@@ -5,7 +5,9 @@ const winston = require('../../../../config/winston'),
     QuizModal = mongoose.model('quiz'),
     resultModal = mongoose.model('result'),
     AssignmentModal = mongoose.model('assignment'),
-    MaterialModal = mongoose.model('material');
+    MaterialModal = mongoose.model('material'),
+    fs = require('fs'),
+    path = require('path');
 
 // Assignment 3
 const teacher = async function(req, res, next) {
@@ -135,7 +137,12 @@ const addquiz = async function(req, res, next) {
 }
 const addassign = async function(req, res, next) {
     try{
-        new AssModal(req.body).save((err) => {
+
+        let data = JSON.parse(JSON.stringify(req.body))
+        data.file = undefined;
+        data.questions = '/uploads/assignments/' + req.file.filename
+    
+        new AssignmentModal(data).save((err) => {
             if (err) {
                 winston.error(err);
                 res.redirect('/error');
@@ -143,7 +150,9 @@ const addassign = async function(req, res, next) {
                 return res.json({
                     success: 1,
                     message: 'Assignment created successfully.',
-                    data: {}
+                    data: {
+                        assignment: data
+                    }
                 });
             }
         });
@@ -154,11 +163,25 @@ const addassign = async function(req, res, next) {
 }
 const addmat = async function(req, res, next) {
     try{
-        return res.json({
-            status: 0,
-            message: 'addmat',
-            data: {}
+        let data = JSON.parse(JSON.stringify(req.body))
+        data.file = undefined;
+        data.attachments = '/uploads/material/' + req.file.filename
+
+        new MaterialModal(data).save((err) => {
+            if (err) {
+                winston.error(err);
+                res.redirect('/error');
+            } else {
+                return res.json({
+                    success: 1,
+                    message: 'Material Added successfully.',
+                    data: {
+                        material: data
+                    }
+                });
+            }
         });
+
     } catch(error) {
         winston.error(error);
         res.redirect('/error');
@@ -166,11 +189,17 @@ const addmat = async function(req, res, next) {
 }
 const addmarks = async function(req, res, next) {
     try{
+
+        const marks = await new resultModal(req.body).save();
+
         return res.json({
             status: 0,
-            message: 'addmarks',
-            data: {}
+            message: 'Marks Added',
+            data: {
+                marks: marks
+            }
         });
+
     } catch(error) {
         winston.error(error);
         res.redirect('/error');
@@ -178,11 +207,17 @@ const addmarks = async function(req, res, next) {
 }
 const marks = async function(req, res, next) {
     try{
+
+        const marks = await resultModal.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true});
+
         return res.json({
             status: 0,
-            message: 'marks',
-            data: {}
+            message: 'marks updated',
+            data: {
+                marks: marks
+            }
         });
+
     } catch(error) {
         winston.error(error);
         res.redirect('/error');
@@ -190,11 +225,15 @@ const marks = async function(req, res, next) {
 }
 const deleteQuiz = async function(req, res, next) {
     try{
+
+        await QuizModal.findByIdAndDelete({_id: req.params.id})
+
         return res.json({
             status: 0,
-            message: 'deleteQuiz',
+            message: 'Quiz Deleted',
             data: {}
         });
+
     } catch(error) {
         winston.error(error);
         res.redirect('/error');
@@ -202,9 +241,19 @@ const deleteQuiz = async function(req, res, next) {
 }
 const deleteAssignment = async function(req, res, next) {
     try{
+
+
+        const files = await AssignmentModal.findOne({_id: req.params.id}).select('questions submissions')
+
+        fs.unlink(path.join(path.dirname(require.main.filename), 'public', files.questions),  () => console.log());
+
+        files.submissions.map( file => fs.unlink(path.join(path.dirname(require.main.filename), 'public', file),  () => console.log()))
+
+        await AssignmentModal.findByIdAndDelete({_id: req.params.id})
+        
         return res.json({
             status: 0,
-            message: 'deleteAssignment',
+            message: 'Assignment Deleted',
             data: {}
         });
     } catch(error) {
@@ -214,6 +263,13 @@ const deleteAssignment = async function(req, res, next) {
 }
 const deleteMaterial = async function(req, res, next) {
     try{
+
+        const files = await MaterialModal.findOne({_id: req.params.id}).select('attachments')
+
+        fs.unlink(path.join(path.dirname(require.main.filename), 'public', files.attachments), () => console.log());
+
+        await MaterialModal.findByIdAndDelete({_id: req.params.id})
+
         return res.json({
             status: 0,
             message: 'deleteMaterial',
@@ -226,9 +282,12 @@ const deleteMaterial = async function(req, res, next) {
 }
 const deleteMarks = async function(req, res, next) {
     try{
+
+        await quizResModal.findByIdAndDelete({_id: req.params.id})
+
         return res.json({
             status: 0,
-            message: 'deleteMarks',
+            message: 'Marks Deleted',
             data: {}
         });
     } catch(error) {

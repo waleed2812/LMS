@@ -188,7 +188,7 @@ const submitAssignment = async function(req, res, next) {
             $push: {
                 submissions: {
                     user: req.user._id,
-                    path: '/uploads/assignments/' + req.file.filename
+                    path: '/uploads/submission/' + req.file.filename
                 }
             }
         });
@@ -197,7 +197,7 @@ const submitAssignment = async function(req, res, next) {
             success: 1,
             message: 'Assignment Submitted.',
             data: {
-                fileUrl: '/uploads/assignments/' + req.file.filename,
+                fileUrl: '/uploads/submission/' + req.file.filename,
             }
         });
     

@@ -82,7 +82,7 @@ let userProfileImage = async (req, res, next) => {
 
     await userAccountModel.updateOne({ _id: req.user._id }, {
         $set: {
-            profileImage: '/uploads/' + req.file.originalname
+            profileImage: '/uploads/dp/' + req.file.originalname
         }
     });
 
@@ -91,7 +91,7 @@ let userProfileImage = async (req, res, next) => {
         message: 'User Image Updated.',
         data: {
             file: req.file,
-            imageUrl: '/uploads/' + req.file.filename,
+            imageUrl: '/uploads/dp/' + req.file.filename,
         }
     });
 };

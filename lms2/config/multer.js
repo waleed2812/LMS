@@ -5,7 +5,7 @@ let upload = () => {
     return multer({
         storage: multer.diskStorage({
             destination: (req, file, callback) => {
-                callback(null, __dirname + '/../public/uploads');
+                callback(null, __dirname + '/../public/uploads/dp');
             },
             filename: (req, file, callback) => {
                 let fileName = Date.now() + '-' + file.originalname.toLowerCase().split(' ').join('-');
@@ -27,7 +27,7 @@ let uploadAssignment = () => {
     return multer({
         storage: multer.diskStorage({
             destination: (req, file, callback) => {
-                callback(null, __dirname + '/../public/uploads/assignments');
+                callback(null, __dirname + '/../public/uploads/submission');
             },
             filename: (req, file, callback) => {
                 let fileName = Date.now() + '-' + file.originalname.toLowerCase().split(' ').join('-');
@@ -68,8 +68,31 @@ let createAssignment = () => {
     });
 };
 
+let material = () => {
+    return multer({
+        storage: multer.diskStorage({
+            destination: (req, file, callback) => {
+                callback(null, __dirname + '/../public/uploads/material');
+            },
+            filename: (req, file, callback) => {
+                let fileName = Date.now() + '-' + file.originalname.toLowerCase().split(' ').join('-');
+                callback(null, fileName);
+            }
+        }),
+        fileFilter: (req, file, callback) => {
+            if (file) { // file type check
+                callback(null, true);
+            } else {
+                // callback(null, false);
+                return callback(new Error('Allowed only .docx and .pdf files.'));
+            }
+        }
+    });
+};
+
 module.exports = {
     upload,
     uploadAssignment,
-    createAssignment
+    createAssignment,
+    material
 };
