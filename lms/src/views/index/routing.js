@@ -16,7 +16,6 @@ import Teacher from "../teacher/teacher";
 
 function Routing() {
 	const [user] = React.useContext(AuthContext);
-	console.log("User: ", user);
 
 	return (
 		<Router>
@@ -24,7 +23,9 @@ function Routing() {
 				<Route path="/" exact>
 					{user !== null ? <Redirect to={"/" + user.userType} /> : <Redirect to={"/login"} />}
 				</Route>
-				<Route path="/login">{user !== null ? <Redirect to={"/" + user.userType} /> : <Login />}</Route>
+				<Route path="/login">
+					{user !== null ? <Redirect to={"/" + user.userType} /> : <Login />}
+				</Route>
 				<Route path="/admin">
 					{user !== null && user?.userType === "admin" ? <Admin /> : <Redirect to={"/login"} />}
 				</Route>

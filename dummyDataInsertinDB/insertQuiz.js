@@ -83,6 +83,7 @@ mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net
         ],
         "startDate": new Date(new Date().getDate()),
         "endDate": new Date(new Date().getDate() + 1),
+        "duration": "10"
     }).save((err) => {
         if (err) {
             console.error(err);

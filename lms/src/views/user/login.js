@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import Header from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import axios from "axios";
+import { AuthContext } from '../../context/authcontext';
+import { useAlert } from 'react-alert';
 
 const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [user, setUser] = useContext(AuthContext);
+
+	let alert = useAlert();
 
 	const handleSubmit = () => {
-		console.log("Username: ", username);
-		console.log("Password: ", password);
+		axios.post(global.config.URI_BE + '/user/login', {
+			username: username,
+			password: password
+		}, {})
+			.then( res => {
+				setUser(res.data.data.user);
+				alert.show("Logged in", {type: 'success'})
+			})
+			.catch( err => {
+				console.log(err)
+				alert.show("Not Logged in", {type: 'error'})
+			})
 	};
 
 	return (
@@ -21,7 +37,7 @@ const Login = () => {
 						<Col>
 							<div className="login-form">
 								<h3>Login to your account!</h3>
-								<form onSubmit={() => handleSubmit()}>
+								{/* <form onSubmit={() => handleSubmit()}> */}
 									<Row>
 										<Col md="12" sm="12">
 											<div className="form-group">
@@ -48,10 +64,10 @@ const Login = () => {
 											</div>
 										</Col>
 										<Col md="12" sm="12">
-											<Button>Login</Button>
+											<Button type="submit" onClick={handleSubmit}>Login</Button>
 										</Col>
 									</Row>
-								</form>
+								{/* </form> */}
 							</div>
 						</Col>
 					</Row>

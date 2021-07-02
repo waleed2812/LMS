@@ -108,6 +108,7 @@ require('./config/config')((err) => {
             checkExpirationInterval: 900000,
             cookie: {
                 maxAge: 60 * 24 * 3600 * 1000,
+                sameSite: false,
             },
         }));
 
