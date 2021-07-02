@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "reactstrap";
+import { Table, Button } from "reactstrap";
 import { getUser, getUsers } from "../services/userService";
 
 const Users = () => {
@@ -11,23 +11,10 @@ const Users = () => {
 		console.log(users);
 	}
 
-	// const handleDelete = (id) => {
-	// 	deleteChild(id);
-	// 	setChildren(
-	// 		children.filter((child) => {
-	// 			const { _id } = child;
-	// 			return _id !== id;
-	// 		})
-	// 	);
-	// };
-
-	// const handleEdit = () => {
-	// 	console.log("Edit");
-	// };
-
 	useEffect(() => {
 		getAllUsers();
 	}, []);
+
 	return (
 		<Table bordered>
 			<thead>
@@ -46,20 +33,67 @@ const Users = () => {
 				<tr>
 					<th scope="row">1</th>
 					<td>Mark</td>
-					<td>Otto</td>
-					<td>@mdo</td>
+					<td>demo@mail.com</td>
+					<td>123456788</td>
+					<td></td>
+					<td>Teacher</td>
+					<td>21-7-21</td>
+					<td>
+						<Button className="editbtn">Edit</Button>
+						<Button className="dltbtn">Delete</Button>
+					</td>
 				</tr>
 				<tr>
-					<th scope="row">2</th>
-					<td>Jacob</td>
-					<td>Thornton</td>
-					<td>@fat</td>
+					<th scope="row">1</th>
+					<td>Mark</td>
+					<td>demo@mail.com</td>
+					<td>123456788</td>
+					<td></td>
+					<td>Teacher</td>
+					<td>21-7-21</td>
+					<td>
+						<Button className="editbtn">Edit</Button>
+						<Button className="dltbtn">Delete</Button>
+					</td>
 				</tr>
 				<tr>
-					<th scope="row">3</th>
-					<td>Larry</td>
-					<td>the Bird</td>
-					<td>@twitter</td>
+					<th scope="row">1</th>
+					<td>Mark</td>
+					<td>demo@mail.com</td>
+					<td>123456788</td>
+					<td></td>
+					<td>Teacher</td>
+					<td>21-7-21</td>
+					<td>
+						<Button className="editbtn">Edit</Button>
+						<Button className="dltbtn">Delete</Button>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">1</th>
+					<td>Mark</td>
+					<td>demo@mail.com</td>
+					<td>123456788</td>
+					<td></td>
+					<td>Teacher</td>
+					<td>21-7-21</td>
+					<td>
+						<Button className="editbtn">Edit</Button>
+						<Button className="dltbtn">Delete</Button>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">1</th>
+					<td>Mark</td>
+					<td>demo@mail.com</td>
+					<td>123456788</td>
+					<td></td>
+					<td>Teacher</td>
+					<td>21-7-21</td>
+					<td>
+						<Button className="editbtn">Edit</Button>
+						<Button className="dltbtn">Delete</Button>
+					</td>
 				</tr>
 			</tbody>
 		</Table>

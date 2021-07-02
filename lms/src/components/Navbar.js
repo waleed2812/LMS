@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from "reactstrap";
 
 const Header = (props) => {
 	return (
@@ -18,6 +18,11 @@ const Header = (props) => {
 					</NavItem>
 					<NavItem>
 						<NavLink href="/">{props.nav4}</NavLink>
+					</NavItem>
+					<NavItem>
+						<NavLink>
+							<Button className="logoutbtn">Logout</Button>
+						</NavLink>
 					</NavItem>
 				</Nav>
 			</Navbar>

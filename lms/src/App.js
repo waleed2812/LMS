@@ -14,6 +14,8 @@ import Login from "./views/user/login";
 import Header from "./components/Navbar";
 import Footer from "./components/Footer";
 import Admin from "./views/admin/admin";
+import Student from "./views/student/student";
+import Teacher from "./views/teacher/teacher";
 
 function App() {
 	return (
@@ -24,6 +26,8 @@ function App() {
 				{/* <Login /> */}
 				{/* <Footer /> */}
 				{/* <Admin /> */}
+				{/* <Student /> */}
+				{/* <Teacher /> */}
 			</AuthProvider>
 		</AlertProvider>
 	);
