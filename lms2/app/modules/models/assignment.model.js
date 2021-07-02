@@ -10,7 +10,10 @@ let assignment = new schema ({
     class: {type: schema.Types.ObjectId, ref: 'Class', required: true},
     teacher: {type: schema.Types.ObjectId, required: true, ref: 'userAccounts'},
     questions: { type: String, default: '', required: true},
-    submissions: [{ type: String, default: ''}],
+    submissions: [{
+        user: {type: schema.Types.ObjectId, required: true, ref: 'userAccounts'},
+        path: { type: String, default: ''}
+    }],
     startDate: {type: Date, default: Date.now(), required: true},
     endDate: {type: Date, default: Date.now(), required: true},
 }); 

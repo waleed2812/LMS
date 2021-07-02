@@ -8,10 +8,6 @@ const schema = mongoose.Schema;
 let quizRes = new schema ({
     quiz: {type: schema.Types.ObjectId, ref: 'quiz'},
     student: {type: schema.Types.ObjectId, ref: 'userAccounts'},
-    marks: {
-        obtained: { type: String, default: ''},
-        total: { type: String, default: ''}
-    },
     answers: [{ type: String, default: '', required: true}],
 }); 
 

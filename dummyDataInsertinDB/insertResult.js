@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'),
     quizModal = require('./schema').quizModal,
     userAccountModel = require('./schema').userAccountModel,
-    quizResModal = require('./schema').quizResModal;
+    resultModal = require('./schema').result;
 
 mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`, async function(err, db){
 
@@ -16,19 +16,13 @@ mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net
 
     const students = await userAccountModel.find({userType: 'student'}).select('_id')
 
-    new quizResModal({
-        "quiz": quizes[0]._id,
-        "student": students[4]._id,
-        "answers": [
-            "true",
-            "Woof",
-            "Star Wars",
-            "16;Sixteen",
-            "This is the textual Answer",
-            "This is the textual Answer",
-            "This is the textual Answer",
-            "This is the textual Answer",
-        ],
+    new resultModal({
+        "submission": quizes[0]._id,
+        "student": students[1]._id,
+        "marks": {
+            "obtained": "5",
+            "total": "10"
+        },
     }).save((err) => {
         if (err) {
             console.error(err);
@@ -36,7 +30,7 @@ mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net
         } else {
             console.log({
                 success: 1,
-                message: 'Quiz Attempted successfully.',
+                message: 'Result Added successfully.',
                 data: {}
             });
             return;

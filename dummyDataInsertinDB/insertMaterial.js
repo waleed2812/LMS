@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
     userAccountModel = require('./schema').userAccountModel,
+    materialModal = require('./schema').materialModal,
     classModal = require('./schema').classModal;
 
 mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`, async function(err, db){
@@ -11,32 +12,27 @@ mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net
         return;
     }
 
-    const students = await userAccountModel.find({userType: 'student'}).select('_id')
-
-    let insertStd = [];
-
-    students.map( (student) => insertStd.push(student._id))
+    const classes = await classModal.find({}).select('_id')
 
     const teachers = await userAccountModel.find({userType: 'teacher'}).select('_id')
 
-
-    new classModal({
-        "name": "BCS-6C",
-        "teacher": teachers[4]._id,
-        "students": insertStd,
+    new materialModal({
+        "title": "Sample Material" + 1,
+        "class": classes[2]._id,
+        "teacher": teachers[0]._id,
+        "attachments": "public/material/" + Date.now() + "-Assignemnt Detail",
     }).save((err) => {
         if (err) {
             console.error(err);
-            db.close();
             return;
         } else {
             console.log({
                 success: 1,
-                message: 'Class created successfully.',
+                message: 'Material created successfully.',
                 data: {}
             });
-            db.close();
             return;
         }
     });
+
 });
