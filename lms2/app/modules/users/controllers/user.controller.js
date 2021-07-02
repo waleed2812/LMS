@@ -4,6 +4,15 @@ const winston = require('../../../../config/winston'),
     mongoose = require('mongoose'),
     userAccountModel = mongoose.model('userAccounts');
 
+
+const logout = function (req, res, next) {
+    req.logout();
+    req.session.destroy(function (err) {
+        if (err) { return next(err); }
+        return res.json({status: 1, message: "Logged Out", data:{}});
+    });
+};
+
 let updateUserInfo = async (req, res, next) => {
     try {
         const userId = req.params.userId;
@@ -24,21 +33,18 @@ let updateUserInfo = async (req, res, next) => {
 
 
 let logInUser = (req, res, next) => {
-    passport.authenticate('local', { session: false }, (err, user, info) => {
+    passport.authenticate('local', function(err, user, info) {
         if (err) {
             return next(err);
         }
         if (!user) {
             return next(info);
         }
-
-        let userObject = user.toJSON();
-        delete userObject.password;
-
-        req.logIn(userObject, (err) => {
+        
+        req.logIn(user, function(err) {
             if (err) {
                 winston.error(err);
-                return next({ msgCode: 5051 });
+                return next({ msgCode: 114 });
             }
             return next();
         });
@@ -47,14 +53,17 @@ let logInUser = (req, res, next) => {
 
 let sendSingInSuccess = async (req, res, next) => {
 
-    const token = jwt.sign(req.user, config.session.secret);
+    let copy = JSON.stringify(req.user);
+    copy = JSON.parse(copy);
+    copy.password = undefined;
+    copy.resetPasswordExpires = undefined;
+    copy.resetPasswordToken = undefined;
 
     return res.json({
-        success: 1,
-        message: 'User signIn successfully.',
+        message: 'SignIn successfull',
         data: {
-            user: req.user,
-            token: token
+            user: copy,
+            session: req.session
         }
     });
 };
@@ -73,13 +82,13 @@ let userProfileImage = async (req, res, next) => {
 
     await userAccountModel.updateOne({ _id: req.user._id }, {
         $set: {
-            profileImage: '/uploads/' + req.file.filename
+            profileImage: '/uploads/' + req.file.originalname
         }
     });
 
     return res.json({
         success: 1,
-        message: 'User signIn successfully.',
+        message: 'User Image Updated.',
         data: {
             file: req.file,
             imageUrl: '/uploads/' + req.file.filename,
@@ -93,4 +102,5 @@ module.exports = {
     sendSingInSuccess,
     sendCurrentUser,
     userProfileImage,
+    logout,
 };

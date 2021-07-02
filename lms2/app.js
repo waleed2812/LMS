@@ -16,6 +16,8 @@ const express = require('express'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     expressListners = require('./config/expressListners'),
+    session = require('express-session'),
+    mongoStore = require('connect-mongo'),
     app = express();
 
 // Some Global Constants
@@ -36,6 +38,7 @@ let corsOptionsDelegate = (req, callback) => {
         'http://localhost:' + (process.env.FE_PORT || 6969),
         'http://192.168.1.73:' + (process.env.PORT || 6968),
         'http://192.168.1.73:' + (process.env.FE_PORT || 6969),
+        'http://192.168.1.73:' + (4200),
     ];
     if (allowedOrigins.indexOf(req.header('Origin')) !== -1) {
         corsOptions = {
@@ -90,6 +93,22 @@ require('./config/config')((err) => {
         app.use(cors(corsOptionsDelegate));
         app.use(helmet());
         app.use(cookieParser());
+
+        app.use(session({
+            secret: global.config.session.secret,
+            store: mongoStore.create({
+                mongoUrl: config.mongodb.host,
+                touchAfter: 14 * 24 * 60 * 60, // time period in seconds,
+                mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
+            }),
+            resave: true,
+            saveUninitialized: true,
+            clearExpired: true,
+            checkExpirationInterval: 900000,
+            cookie: {
+                maxAge: 60 * 24 * 3600 * 1000,
+            },
+        }));
 
         var passport = require('./config/passport');
         app.use(passport.initialize());
