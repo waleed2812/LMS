@@ -16,6 +16,8 @@ const express = require('express'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     expressListners = require('./config/expressListners'),
+    session = require('express-session'),
+    mongoStore = require('connect-mongo'),
     app = express();
 
 // Some Global Constants
@@ -92,6 +94,22 @@ require('./config/config')((err) => {
         app.use(cors(corsOptionsDelegate));
         app.use(helmet());
         app.use(cookieParser());
+
+        app.use(session({
+            secret: global.config.session.secret,
+            store: mongoStore.create({
+                mongoUrl: config.mongodb.host,
+                touchAfter: 14 * 24 * 60 * 60, // time period in seconds,
+                mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
+            }),
+            resave: true,
+            saveUninitialized: true,
+            clearExpired: true,
+            checkExpirationInterval: 900000,
+            cookie: {
+                maxAge: 60 * 24 * 3600 * 1000,
+            },
+        }));
 
         var passport = require('./config/passport');
         app.use(passport.initialize());

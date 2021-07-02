@@ -3,12 +3,10 @@ const METHOD = 'http',
     PORT = process.env.PORT || 6968,
     DB_USER = process.env.DB_USER || 'dbUser',
     DB_PSWRD = process.env.DB_PSWRD || 'dbUserPassword',
-    ATLAS = `mongodb+srv://${DB_USER}:${DB_PSWRD}@cluster0.yqhzm.mongodb.net/SCM?retryWrites=true&w=majority`,
+    ATLAS = `mongodb+srv://${DB_USER}:${DB_PSWRD}@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`,
     HOST = "mongodb://localhost:27017/lms",
     URL = METHOD + "://" + IP,
     URI = URL + ":" + PORT;
-
-
 
 module.exports = {
 	"METHOD" : METHOD,
