@@ -6,9 +6,7 @@ const mongoose = require('mongoose'),
 const schema = mongoose.Schema; 
 
 let Class = new schema ({
-    course: {type: String, default: '', required: true},
-    code: {type: String, default: '', required: true},
-    room: { type: String, default: '', required: true},
+    name: {type: String, default: '', required: true},
     teacher: {type: schema.Types.ObjectId, ref: 'userAccounts'},
     students: [{type: schema.Types.ObjectId, ref: 'userAccounts'}]
 }); 
@@ -16,30 +14,3 @@ let Class = new schema ({
 Class.plugin(mongoose_timestamps);
 
 module.exports = mongoose.model('Class', Class);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
