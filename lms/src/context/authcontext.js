@@ -6,20 +6,25 @@ export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = React.useState(null),
+    const [user, setUserOnly] = React.useState(null),
         alert = useAlert(),
-        [cookies, ] = useCookies(['user']);
+        [cookies, setCookies] = useCookies(['user']);
+
+    const setUser = (user) => {
+        setUserOnly(user);
+        setCookies("user", user)
+    }
 
     React.useEffect(() => {
         
         if (cookies['user']) setUser(cookies['user']);
         else
-        axios.get(global.config.URI_BE + '/admin/loggedin')
-          .then( () => {})
+        axios.get(global.config.URI_BE + '/user/current')
+          .then( () => {alert.show("Logged In", {type: "success"})})
           .catch(() => {})
       
   
-    }, [alert, user, cookies])
+    }, [])
 
     return <AuthContext.Provider value={[user, setUser]}>{children}</AuthContext.Provider>
 } 

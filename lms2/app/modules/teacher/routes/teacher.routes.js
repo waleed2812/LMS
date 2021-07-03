@@ -1,5 +1,8 @@
 const teacherController =  require('../controllers/teacher.controller'),
-    passport = require('../../../../config/passport');
+    passport = require('../../../../config/passport'),
+    multer = require('../../../../config/multer').createAssignment()
+    multerMaterial = require('../../../../config/multer').material();
+
 
 module.exports = (app, version) => {
     // Assignment 3
@@ -49,12 +52,14 @@ module.exports = (app, version) => {
     app.post(version + '/teacher/addassign',
         passport.isAuthenticated,
         passport.isAuthorized('teacher'),
+        multer.single('questions'),
         teacherController.addassign
     );
 
     app.post(version + '/teacher/addmat',
         passport.isAuthenticated,
         passport.isAuthorized('teacher'),
+        multerMaterial.single('attachments'),
         teacherController.addmat
     );
 

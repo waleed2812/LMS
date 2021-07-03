@@ -36,6 +36,7 @@ let corsOptionsDelegate = (req, callback) => {
     let allowedOrigins = [
         'http://localhost:' + (process.env.PORT || 6968),
         'http://localhost:' + (process.env.FE_PORT || 6969),
+        'http://localhost:' + (4200),
         'http://192.168.1.73:' + (process.env.PORT || 6968),
         'http://192.168.1.73:' + (process.env.FE_PORT || 6969),
         'http://192.168.1.73:' + (4200),
@@ -107,6 +108,7 @@ require('./config/config')((err) => {
             checkExpirationInterval: 900000,
             cookie: {
                 maxAge: 60 * 24 * 3600 * 1000,
+                sameSite: false,
             },
         }));
 
