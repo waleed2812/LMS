@@ -8,11 +8,25 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUserOnly] = React.useState(null),
         alert = useAlert(),
-        [cookies, setCookies] = useCookies(['user']);
+        [cookies, setCookies, removeCookie] = useCookies(['user']);
 
     const setUser = (user) => {
         setUserOnly(user);
         setCookies("user", user)
+    }
+
+    const logout = () => {
+        setUserOnly(null);
+        removeCookie("user");
+        axios.delete(global.config.URI_BE + '/logout')
+            .then( res => {
+                console.log(res);
+				alert.show("Logged Out", {type: "success"})
+            })
+            .catch( err => {
+                console.log(err);
+				alert.show("Not Logged Out", {type: "error"})
+            })
     }
 
     React.useEffect(() => {
@@ -26,5 +40,5 @@ export const AuthProvider = ({ children }) => {
   
     }, [])
 
-    return <AuthContext.Provider value={[user, setUser]}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={[user, setUser, logout]}>{children}</AuthContext.Provider>
 } 

@@ -1,6 +1,7 @@
 const METHOD = 'http',
     IP = '192.168.1.73',
     PORT = process.env.PORT || 6968,
+    FE_PORT = process.env.FE_PORT || 6969,
     DB_USER = process.env.DB_USER || 'dbUser',
     DB_PSWRD = process.env.DB_PSWRD || 'dbUserPassword',
     ATLAS = `mongodb+srv://${DB_USER}:${DB_PSWRD}@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`,
@@ -12,6 +13,7 @@ module.exports = {
 	"METHOD" : METHOD,
     "IP": IP,
     "PORT": PORT,
+    "FE_PORT": FE_PORT,
     "mongodb" : {
         "host": ATLAS,
         "credentials": {

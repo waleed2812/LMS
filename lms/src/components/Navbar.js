@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from "reactstrap";
+import { AuthContext } from "../context/authcontext";
 
 const Header = (props) => {
+
+	const [, , logout] = React.useContext(AuthContext);
+
 	return (
 		<div className="navbar">
 			<Navbar light expand="md">
@@ -21,7 +25,7 @@ const Header = (props) => {
 					</NavItem>
 					<NavItem>
 						<NavLink>
-							<Button className="logoutbtn">Logout</Button>
+							<Button className="logoutbtn" onClick={logout}>Logout</Button>
 						</NavLink>
 					</NavItem>
 				</Nav>
