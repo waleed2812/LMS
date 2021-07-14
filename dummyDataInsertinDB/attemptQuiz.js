@@ -1,9 +1,11 @@
 const mongoose = require('mongoose'),
     quizModal = require('./schema').quizModal,
     userAccountModel = require('./schema').userAccountModel,
-    quizResModal = require('./schema').quizResModal;
+    quizResModal = require('./schema').quizResModal,
+    ATLAS = `mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`,
+    HOST = "mongodb://localhost:27017/lms";
 
-mongoose.connect(`mongodb+srv://dbUser:dbUserPassword@cluster0.yqhzm.mongodb.net/lms?retryWrites=true&w=majority`, async function(err, db){
+mongoose.connect(HOST, async function(err, db){
 
     if(err) {
         console.error("Failed to Connect Mongoose");

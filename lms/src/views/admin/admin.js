@@ -11,7 +11,7 @@ function Admin() {
 	let alert = useAlert();
 
 	const getCurrentUser = () => {
-		axios.get(global.config.URI_BE + '/user/current')
+		axios.get(global.config.URI_BE + '/user/current', {withCredentials: true})
 			.then( res => {
 				console.log(res);
 				alert.show("Logged In", {type: "success"})

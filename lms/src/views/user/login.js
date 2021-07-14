@@ -14,10 +14,13 @@ const Login = () => {
 	let alert = useAlert();
 
 	const handleSubmit = () => {
+
 		axios.post(global.config.URI_BE + '/user/login', {
 			username: username,
 			password: password
-		}, {})
+		}, {
+			withCredentials: true
+		})
 			.then( res => {
 				setUser(res.data.data.user);
 				alert.show("Logged in", {type: 'success'})

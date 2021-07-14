@@ -67,31 +67,17 @@ require('./config/config')((err) => {
         global.server.on('listening', expressListners.onListening);
         app.use(express.static(path.join(__dirname, 'public')));
 
-        // Enable CORS 
-        let corsOptionsDelegate = (req, callback) => {
-            let corsOptions;
-            let allowedOrigins = [
-                'http://localhost:' + global.config.PORT,
-                'http://localhost:' + global.config.URLFE_PORT,
-                'http://localhost:' + (4200),
-                global.config.URL + global.config.PORT,
-                global.config.URL + global.config.FE_PORT,
-                global.config.URL + (4200),
-            ];
-            if (allowedOrigins.indexOf(req.header('Origin')) !== -1) {
-                corsOptions = {
-                    credentials: true,
-                    origin: true
-                };
-            } else {
-                corsOptions = {
-                    origin: false
-                };
-            }
-            callback(null, corsOptions);
-        };
-
-        app.use(cors(corsOptionsDelegate));
+        app.use(cors({
+            origin: [
+                "http://localhost:6968",
+                "http://localhost:6969",
+                "http://192.168.1.73:6968",
+                "http://192.168.1.73:6969",
+                "http://127.0.0.1:6968",
+                "http://127.0.0.1:6969",
+            ],
+            credentials: true
+        }));
         app.use(helmet());
         app.use(cookieParser());
 
