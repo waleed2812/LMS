@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUserOnly(null);
         removeCookie("user");
-        axios.delete(global.config.URI_BE + '/logout')
+        axios.delete(global.config.URI_BE + '/logout', {withCredentials: true})
             .then( res => {
                 console.log(res);
 				alert.show("Logged Out", {type: "success"})
